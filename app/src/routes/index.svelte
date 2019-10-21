@@ -3,10 +3,10 @@
 	export async function preload() {
 
 		const res = await this.fetch(`tasks.json`);
-		const data = await res.json();
+    const initial_data = await res.json();
 
 		if (res.status === 200) {
-			return { data };
+			return { initial_data };
 		} else {
 			this.error(res.status, data.message);
 		}
@@ -15,32 +15,34 @@
 </script>
 
 <script>
-
+  import { writable } from 'svelte/store';
 	import List from '../components/List.svelte'
 	import { onMount } from 'svelte';
+
+  export let initial_data
+  let data = initial_data
 
 	async function new_task(e, task_name) {
 		e && e.preventDefault()
 
-		let data = {"name": task_name};
+		let payload = {"name": task_name};
 		const config = {
-		  method: 'post',
-			body: JSON.stringify(data),
+		  method: 'POST',
+			body: JSON.stringify(payload),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		}
-		console.log('bodyyyy', JSON.stringify(data))
-		let res = await fetch(`tasks.json`, config)
-		console.log('resclient', res)
+		let res = await fetch(`task.json`, config)
 		let resp = await res.json()
-		console.log('resp2', resp)
+		res = await fetch(`tasks.json`);
+	  data = await res.json();
+
 		return resp
 	};
 
 	let task_name = '';
 
-	export let data;
 
 </script>
 

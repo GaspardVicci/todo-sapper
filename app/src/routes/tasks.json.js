@@ -1,6 +1,6 @@
 // routes/tasks.json.js
 const fetch = require('node-fetch');
-let base_url = 'http://localhost:5000/tasks'
+let base_url = 'http://services:5000/tasks'
 
 export async function get(req, res, next) {
 
